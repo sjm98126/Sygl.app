@@ -17,6 +17,10 @@ const generateSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    if (!supabaseAdmin) {
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
+    }
+
     const body = await request.json()
     const validatedData = generateSchema.parse(body)
 

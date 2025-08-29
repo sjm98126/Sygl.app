@@ -149,43 +149,115 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-5xl font-light text-gray-900 mb-6 slide-up">
-              Simple pricing.
+              Credit-based pricing.
               <br />
-              <span className="gradient-text font-semibold">Powerful results.</span>
+              <span className="gradient-text font-semibold">Choose your model.</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto slide-up">
-              Start free. Scale as you grow. Cancel anytime. No hidden fees, no surprises.
+              Pay for what you use. Gemini 2.5 costs 1 credit, Ideogram costs 3 credits. 
+              Start free, scale as you grow, cancel anytime.
             </p>
+            
+            {/* Model Comparison */}
+            <div className="mt-12 grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-green-200 shadow-lg">
+                <div className="flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Gemini 2.5</h3>
+                <p className="text-gray-600 mb-4">Fast, cost-effective logo generation</p>
+                <div className="text-3xl font-bold text-green-600 mb-2">1 Credit</div>
+                <p className="text-sm text-gray-500">Perfect for rapid prototyping and testing ideas</p>
+              </div>
+              
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-purple-200 shadow-lg">
+                <div className="flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+                    <Palette className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Ideogram V2</h3>
+                <p className="text-gray-600 mb-4">Premium, high-quality logo generation</p>
+                <div className="text-3xl font-bold text-purple-600 mb-2">3 Credits</div>
+                <p className="text-sm text-gray-500">Best for final production logos with text rendering</p>
+              </div>
+            </div>
           </div>
           
-          <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {[
               { 
                 name: "Basic", 
-                price: "9", 
+                price: "9",
+                credits: "50",
                 description: "Perfect for individuals and small projects",
-                features: ["50 logo generations", "Standard exports (PNG, JPG)", "Basic templates", "Email support", "Commercial license"],
+                features: [
+                  "50 credits/month",
+                  "~50 Gemini or ~16 Ideogram logos",
+                  "Standard exports (PNG, JPG)",
+                  "Basic templates",
+                  "Email support",
+                  "Commercial license"
+                ],
                 cta: "Start Basic",
                 popular: false
               },
               { 
                 name: "Pro", 
-                price: "24", 
+                price: "24",
+                credits: "150",
                 description: "Best for growing businesses and professionals",
-                features: ["150 logo generations", "HD exports + SVG", "Premium templates", "Priority support", "Advanced editor", "Brand guidelines"],
+                features: [
+                  "150 credits/month",
+                  "~150 Gemini or ~50 Ideogram logos",
+                  "HD exports + SVG",
+                  "Premium templates",
+                  "Priority support",
+                  "Advanced editor",
+                  "Brand guidelines"
+                ],
                 cta: "Go Pro",
                 popular: true
               },
               { 
                 name: "Studio", 
-                price: "49", 
+                price: "49",
+                credits: "500",
                 description: "For agencies and design teams",
-                features: ["500 logo generations", "4K exports + all formats", "Unlimited templates", "White-label solution", "Dedicated support", "Team collaboration"],
+                features: [
+                  "500 credits/month",
+                  "~500 Gemini or ~166 Ideogram logos",
+                  "4K exports + all formats",
+                  "Unlimited templates",
+                  "White-label solution",
+                  "Dedicated support",
+                  "Team collaboration"
+                ],
                 cta: "Start Studio",
                 popular: false
+              },
+              { 
+                name: "Enterprise", 
+                price: "199",
+                credits: "Unlimited",
+                description: "For large organizations and agencies",
+                features: [
+                  "Unlimited credits",
+                  "Unlimited logo generations",
+                  "API access (10k calls/month)",
+                  "Custom branding",
+                  "Priority queue",
+                  "Dedicated account manager",
+                  "Custom integrations",
+                  "SLA guarantee"
+                ],
+                cta: "Contact Sales",
+                enterprise: true
               }
             ].map((tier, index) => (
-              <div key={index} className={`pricing-card ${tier.popular ? 'popular' : ''} slide-up stagger-${index + 1}`}>
+              <div key={index} className={`pricing-card ${tier.popular ? 'popular' : ''} ${tier.enterprise ? 'enterprise' : ''} slide-up stagger-${index + 1}`}>
                 {tier.popular && (
                   <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-10">
                     <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
@@ -194,33 +266,50 @@ export default function Home() {
                   </div>
                 )}
                 
+                {tier.enterprise && (
+                  <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="bg-gradient-to-r from-gray-900 to-gray-700 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
+                      Enterprise
+                    </div>
+                  </div>
+                )}
+                
                 <div className="text-center relative z-10">
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">{tier.name}</h3>
-                  <p className="text-gray-600 mb-8">{tier.description}</p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{tier.name}</h3>
+                  <p className="text-gray-600 mb-6">{tier.description}</p>
                   
-                  <div className="mb-8">
-                    <span className="text-6xl font-light text-gray-900">${tier.price}</span>
-                    <span className="text-gray-500 text-xl font-medium">/month</span>
+                  <div className="mb-6">
+                    <span className="text-5xl font-light text-gray-900">${tier.price}</span>
+                    <span className="text-gray-500 text-lg font-medium">/month</span>
                   </div>
                   
-                  <ul className="space-y-4 mb-10 text-left">
+                  <div className="mb-6 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+                    <div className="text-xl font-bold text-gray-900">{tier.credits}</div>
+                    <div className="text-xs text-gray-600">
+                      {tier.credits === 'Unlimited' ? 'credits' : 'credits/month'}
+                    </div>
+                  </div>
+                  
+                  <ul className="space-y-3 mb-8 text-left">
                     {tier.features.map((feature, i) => (
                       <li key={i} className="flex items-center text-gray-700">
-                        <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center mr-4 flex-shrink-0">
+                        <div className="w-5 h-5 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center mr-3 flex-shrink-0">
                           <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                           </svg>
                         </div>
-                        <span className="font-medium">{feature}</span>
+                        <span className="text-sm font-medium">{feature}</span>
                       </li>
                     ))}
                   </ul>
                   
                   <Link
                     href={`/auth/signup?plan=${tier.name.toLowerCase()}`}
-                    className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 ${
+                    className={`w-full py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 ${
                       tier.popular 
                         ? 'btn-primary' 
+                        : tier.enterprise 
+                        ? 'bg-gray-900 text-white hover:bg-gray-800' 
                         : 'btn-secondary'
                     }`}
                   >

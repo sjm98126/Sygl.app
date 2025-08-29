@@ -367,6 +367,27 @@
   .pricing-card.popular:hover {
     transform: translateY(-8px) scale(1.08);
   }
+
+  .pricing-card.enterprise {
+    border-color: #1f2937;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    box-shadow: var(--shadow-2xl);
+  }
+
+  .pricing-card.enterprise::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.03), rgba(75, 85, 99, 0.03));
+  }
+
+  .pricing-card.enterprise:hover {
+    transform: translateY(-8px) scale(1.05);
+    border-color: rgba(31, 41, 55, 0.5);
+  }
   
   /* Responsive Design */
   @media (max-width: 768px) {

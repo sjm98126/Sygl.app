@@ -58,7 +58,7 @@ export default function Home() {
             <h2 className="text-4xl font-light text-gray-900 mb-6">
               Everything you need.
               <br />
-              <span className="gradient-text font-medium">Nothing you don't.</span>
+              <span className="gradient-text font-medium">Nothing you don&apos;t.</span>
             </h2>
           </div>
           
@@ -116,7 +116,7 @@ export default function Home() {
               { name: "Pro", price: "24", features: ["150 generations", "HD exports", "Priority support"], popular: true },
               { name: "Studio", price: "49", features: ["500 generations", "4K exports", "White-label"] }
             ].map((tier, index) => (
-              <div key={index} className={`${tier.popular ? 'floating-card ring-2 ring-purple-500' : 'card-elevated'}`}>
+              <div key={index} className={`${tier.popular ? 'floating-card ring-2 ring-purple-500' : 'floating-card'}`}>
                 {tier.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                     <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-1 rounded-full text-sm">

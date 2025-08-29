@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Sparkles, ArrowRight, Cpu, Palette, Download, Menu, X } from 'lucide-react'
+import { Sparkles, ArrowRight, Cpu, Palette, Download } from 'lucide-react'
 
 export default function Home() {
   return (
@@ -256,8 +256,8 @@ export default function Home() {
                 cta: "Contact Sales",
                 enterprise: true
               }
-            ].map((tier, index) => (
-              <div key={index} className={`pricing-card ${tier.popular ? 'popular' : ''} ${tier.enterprise ? 'enterprise' : ''} slide-up stagger-${index + 1}`}>
+            ].map((tier, tierIndex) => (
+              <div key={tier.name} className={`pricing-card ${tier.popular ? 'popular' : ''} ${tier.enterprise ? 'enterprise' : ''} slide-up stagger-${tierIndex + 1}`}>
                 {tier.popular && (
                   <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-10">
                     <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">

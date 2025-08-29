@@ -18,13 +18,13 @@ export type GenerationResult = {
   imageData?: string
   error?: string
   creditsUsed: number
-  metadata?: {
-    model: AIModel
-    promptUsed: string
-    timestamp: string
-    generationId: string
-    [key: string]: any
-  }
+        metadata?: {
+        model: AIModel
+        promptUsed: string
+        timestamp: string
+        generationId: string
+        [key: string]: unknown
+      }
 }
 
 export async function generateLogo(options: GenerationOptions): Promise<GenerationResult> {
@@ -45,7 +45,7 @@ export async function generateLogo(options: GenerationOptions): Promise<Generati
     } else if (options.model === 'ideogram') {
       const ideogramOptions: IdeogramGenerationOptions = {
         prompt: options.prompt,
-        style: options.style as any,
+        style: options.style as 'auto' | 'general' | 'realistic' | 'design' | 'render_3d' | 'anime',
         aspectRatio: options.aspectRatio || '1:1'
       }
       result = await generateLogoWithIdeogram(ideogramOptions)
@@ -61,7 +61,7 @@ export async function generateLogo(options: GenerationOptions): Promise<Generati
         model: options.model
       } : undefined
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Logo generation error:', error)
     return {
       success: false,

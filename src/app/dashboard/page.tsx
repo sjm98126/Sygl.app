@@ -19,7 +19,7 @@ import Link from 'next/link'
 
 export default function DashboardPage() {
   const router = useRouter()
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<{ email: string; user_metadata?: { full_name?: string } } | null>(null)
   const [credits, setCredits] = useState(0)
   const [isUnlimited, setIsUnlimited] = useState(false)
   const [subscriptionTier, setSubscriptionTier] = useState('basic')
@@ -73,12 +73,12 @@ export default function DashboardPage() {
         
         // Calculate stats
         const totalGenerations = data.recentGenerations.length
-        const thisMonth = data.recentGenerations.filter((gen: any) => {
+        const thisMonth = data.recentGenerations.filter((gen: { created_at: string }) => {
           const genDate = new Date(gen.created_at)
           const now = new Date()
           return genDate.getMonth() === now.getMonth() && genDate.getFullYear() === now.getFullYear()
         }).length
-        const creditsUsed = data.recentGenerations.reduce((sum: number, gen: any) => sum + gen.credits_used, 0)
+        const creditsUsed = data.recentGenerations.reduce((sum: number, gen: { credits_used: number }) => sum + gen.credits_used, 0)
         
         setStats({ totalGenerations, thisMonth, creditsUsed })
       }
@@ -229,11 +229,12 @@ export default function DashboardPage() {
           
           {recentGenerations.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {recentGenerations.slice(0, 6).map((generation: any) => (
+              {recentGenerations.slice(0, 6).map((generation: { id: string; image_url?: string; model_used: string; status: string; credits_used: number; created_at: string }) => (
                 <div key={generation.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                   <div className="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
                     {generation.image_url ? (
-                      <img 
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img 
                         src={generation.image_url} 
                         alt="Generated logo"
                         className="w-full h-full object-contain rounded-lg"

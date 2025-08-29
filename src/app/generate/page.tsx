@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Sparkles, Cpu, Palette, Wand2, Download, Settings, CreditCard } from 'lucide-react'
+import { Sparkles, Palette, Wand2, Download, Settings, CreditCard } from 'lucide-react'
 import { getModelInfo, AIModel, CREDIT_COSTS } from '@/lib/ai'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 export default function GeneratePage() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<{ email: string; user_metadata?: { full_name?: string } } | null>(null)
   const [credits, setCredits] = useState(0)
   const [isUnlimited, setIsUnlimited] = useState(false)
   
@@ -18,7 +18,7 @@ export default function GeneratePage() {
   const [selectedModel, setSelectedModel] = useState<AIModel>('gemini-2.5')
   const [style, setStyle] = useState('modern')
   const [industry, setIndustry] = useState('')
-  const [colors, setColors] = useState<string[]>([])
+  const [colors] = useState<string[]>([])
   const [format, setFormat] = useState<'square' | 'horizontal' | 'vertical'>('square')
   
   // Generation state
@@ -104,7 +104,7 @@ export default function GeneratePage() {
       }
     } catch (error) {
       setError('Network error occurred')
-      console.error('Generation error:', error)
+      console.error('Generation error:', error as unknown)
     } finally {
       setIsGenerating(false)
     }
@@ -339,6 +339,7 @@ export default function GeneratePage() {
               {generatedImage ? (
                 <div className="space-y-4">
                   <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
                       src={generatedImage} 
                       alt="Generated logo"

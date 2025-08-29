@@ -44,7 +44,7 @@ export interface Database {
           model_used: 'gemini-2.5' | 'ideogram'
           credits_used: number
           image_url: string | null
-          generation_data: any
+          generation_data: Record<string, unknown> | null
           status: 'pending' | 'completed' | 'failed'
           created_at: string
           updated_at: string
@@ -56,7 +56,7 @@ export interface Database {
           model_used: 'gemini-2.5' | 'ideogram'
           credits_used: number
           image_url?: string | null
-          generation_data?: any
+          generation_data?: Record<string, unknown> | null
           status?: 'pending' | 'completed' | 'failed'
           created_at?: string
           updated_at?: string
@@ -68,7 +68,7 @@ export interface Database {
           model_used?: 'gemini-2.5' | 'ideogram'
           credits_used?: number
           image_url?: string | null
-          generation_data?: any
+          generation_data?: Record<string, unknown> | null
           status?: 'pending' | 'completed' | 'failed'
           created_at?: string
           updated_at?: string

@@ -30,8 +30,8 @@ export default function SignInPage() {
       if (data.user) {
         router.push('/dashboard')
       }
-    } catch (error: any) {
-      setError(error.message)
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
       setIsLoading(false)
     }
@@ -46,8 +46,8 @@ export default function SignInPage() {
         }
       })
       if (error) throw error
-    } catch (error: any) {
-      setError(error.message)
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An error occurred')
     }
   }
 
@@ -170,7 +170,7 @@ export default function SignInPage() {
           {/* Sign Up Link */}
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/auth/signup" className="text-purple-600 hover:text-purple-700 font-semibold">
                 Sign up for free
               </Link>

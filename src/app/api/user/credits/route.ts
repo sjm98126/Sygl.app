@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get recent generations for activity
-    const { data: recentGenerations, error: generationsError } = await supabaseAdmin
+    const { data: recentGenerations } = await supabaseAdmin
       .from('logo_generations')
       .select('id, created_at, credits_used, model_used, status')
       .eq('user_id', user.id)

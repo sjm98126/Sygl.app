@@ -8,6 +8,7 @@ export const SUBSCRIPTION_TIERS = {
     name: 'Basic',
     price: 9,
     monthlyCredits: 50,
+    popular: false,
     features: [
       '50 logo generations (Gemini 2.5)',
       '~16 premium generations (Ideogram)',
@@ -23,6 +24,7 @@ export const SUBSCRIPTION_TIERS = {
     name: 'Pro',
     price: 24,
     monthlyCredits: 150,
+    popular: true,
     features: [
       '150 logo generations (Gemini 2.5)',
       '~50 premium generations (Ideogram)',
@@ -33,13 +35,13 @@ export const SUBSCRIPTION_TIERS = {
       'Brand guidelines'
     ],
     stripeProductId: 'prod_pro',
-    stripePriceId: 'price_pro_monthly',
-    popular: true
+    stripePriceId: 'price_pro_monthly'
   },
   studio: {
     name: 'Studio',
     price: 49,
     monthlyCredits: 500,
+    popular: false,
     features: [
       '500 logo generations (Gemini 2.5)',
       '~166 premium generations (Ideogram)',
@@ -56,6 +58,7 @@ export const SUBSCRIPTION_TIERS = {
     name: 'Enterprise',
     price: 199,
     monthlyCredits: -1, // Unlimited
+    popular: false,
     features: [
       'Unlimited logo generations',
       'All AI models included',

@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 export default function GeneratePage() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState<{ email: string; user_metadata?: { full_name?: string } } | null>(null)
+  const [, setUser] = useState<{ email: string; user_metadata?: { full_name?: string } } | null>(null)
   const [credits, setCredits] = useState(0)
   const [isUnlimited, setIsUnlimited] = useState(false)
   
@@ -28,13 +28,14 @@ export default function GeneratePage() {
 
   useEffect(() => {
     checkAuth()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const checkAuth = async () => {
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
       setIsAuthenticated(true)
-      setUser(user)
+      setUser(user as { email: string; user_metadata?: { full_name?: string } })
       await fetchCredits()
     } else {
       router.push('/auth/signin')
@@ -104,7 +105,7 @@ export default function GeneratePage() {
       }
     } catch (error) {
       setError('Network error occurred')
-      console.error('Generation error:', error as unknown)
+      console.error('Generation error:', error)
     } finally {
       setIsGenerating(false)
     }
@@ -280,7 +281,7 @@ export default function GeneratePage() {
                   ].map((option) => (
                     <button
                       key={option.value}
-                      onClick={() => setFormat(option.value as any)}
+                      onClick={() => setFormat(option.value as 'square' | 'horizontal' | 'vertical')}
                       className={`p-3 rounded-lg border-2 text-center transition-all ${
                         format === option.value
                           ? 'border-purple-500 bg-purple-50 text-purple-700'

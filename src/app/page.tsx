@@ -373,7 +373,7 @@ export default function Home() {
                 in seconds, not hours. Designed with obsessive attention to detail.
               </p>
               <div className="flex space-x-6">
-                {['Twitter', 'LinkedIn', 'GitHub', 'Instagram'].map((social, index) => (
+                {['Twitter', 'LinkedIn', 'GitHub', 'Instagram'].map((social) => (
                   <a key={social} href="#" className="text-gray-400 hover:text-purple-600 transition-colors duration-300">
                     <span className="sr-only">{social}</span>
                     <div className="w-10 h-10 bg-gray-100 hover:bg-purple-100 rounded-lg flex items-center justify-center transition-all duration-300">

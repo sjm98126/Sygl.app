@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { generateLogo, GenerationOptions, AIModel } from '@/lib/ai'
@@ -43,33 +44,40 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
+    // Type assertion for userData
+    const userInfo = userData as { credits_remaining: number; subscription_tier: string }
+
     // Check if user can afford this generation
     const creditsNeeded = CREDIT_COSTS[validatedData.model as AIModel]
-    if (!canAffordGeneration(userData.credits_remaining, validatedData.model as AIModel)) {
+    if (!canAffordGeneration(userInfo.credits_remaining, validatedData.model as AIModel)) {
       return NextResponse.json({ 
         error: 'Insufficient credits',
         creditsNeeded,
-        creditsAvailable: userData.credits_remaining
+        creditsAvailable: userInfo.credits_remaining
       }, { status: 402 })
     }
 
     // Create generation record
+    const insertData = {
+      user_id: user.id,
+      prompt: validatedData.prompt,
+      model_used: validatedData.model as AIModel,
+      credits_used: creditsNeeded,
+      status: 'pending' as const
+    }
+    
     const { data: generationRecord, error: insertError } = await supabaseAdmin
       .from('logo_generations')
-      .insert({
-        user_id: user.id,
-        prompt: validatedData.prompt,
-        model_used: validatedData.model as AIModel,
-        credits_used: creditsNeeded,
-        status: 'pending'
-      })
+      .insert(insertData as any)
       .select()
       .single()
 
-    if (insertError) {
+    if (insertError || !generationRecord) {
       console.error('Failed to create generation record:', insertError)
       return NextResponse.json({ error: 'Database error' }, { status: 500 })
     }
+
+    const genRecord = generationRecord as { id: string }
 
     try {
       // Generate the logo
@@ -87,28 +95,29 @@ export async function POST(request: NextRequest) {
 
       if (result.success) {
         // Update generation record with success
-        await supabaseAdmin
-          .from('logo_generations')
-          .update({
-            status: 'completed',
-            image_url: result.imageUrl,
-            generation_data: result.metadata
-          })
-          .eq('id', generationRecord.id)
+        const updateData = {
+          status: 'completed' as const,
+          image_url: result.imageUrl,
+          generation_data: result.metadata
+        }
+        await (supabaseAdmin
+          .from('logo_generations') as any)
+          .update(updateData)
+          .eq('id', genRecord.id)
 
         // Deduct credits from user (only on success)
-        const newCredits = userData.credits_remaining === -1 
+        const newCredits = userInfo.credits_remaining === -1 
           ? -1  // Unlimited stays unlimited
-          : userData.credits_remaining - creditsNeeded
+          : userInfo.credits_remaining - creditsNeeded
 
-        await supabaseAdmin
-          .from('users')
+        await (supabaseAdmin
+          .from('users') as any)
           .update({ credits_remaining: newCredits })
           .eq('id', user.id)
 
         return NextResponse.json({
           success: true,
-          generationId: generationRecord.id,
+          generationId: genRecord.id,
           imageUrl: result.imageUrl,
           creditsUsed: creditsNeeded,
           creditsRemaining: newCredits,
@@ -116,29 +125,31 @@ export async function POST(request: NextRequest) {
         })
       } else {
         // Update generation record with failure
-        await supabaseAdmin
-          .from('logo_generations')
-          .update({
-            status: 'failed',
-            generation_data: { error: result.error }
-          })
-          .eq('id', generationRecord.id)
+        const failureData = {
+          status: 'failed' as const,
+          generation_data: { error: result.error }
+        }
+        await (supabaseAdmin
+          .from('logo_generations') as any)
+          .update(failureData)
+          .eq('id', genRecord.id)
 
         return NextResponse.json({
           success: false,
           error: result.error,
-          generationId: generationRecord.id
+          generationId: genRecord.id
         }, { status: 500 })
       }
     } catch (generationError) {
       // Update generation record with failure
-      await supabaseAdmin
-        .from('logo_generations')
-        .update({
-          status: 'failed',
-          generation_data: { error: 'Generation service error' }
-        })
-        .eq('id', generationRecord.id)
+      const errorData = {
+        status: 'failed' as const,
+        generation_data: { error: 'Generation service error' }
+      }
+      await (supabaseAdmin
+        .from('logo_generations') as any)
+        .update(errorData)
+        .eq('id', genRecord.id)
 
       throw generationError
     }
@@ -148,7 +159,7 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ 
         error: 'Invalid request data',
-        details: error.errors
+        details: error.issues
       }, { status: 400 })
     }
 

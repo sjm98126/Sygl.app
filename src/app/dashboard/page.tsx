@@ -33,6 +33,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     checkAuth()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const checkAuth = async () => {
@@ -43,7 +44,7 @@ export default function DashboardPage() {
         return
       }
 
-      setUser(user)
+      setUser(user as { email: string; user_metadata?: { full_name?: string } })
       await fetchUserData()
     } catch (error) {
       console.error('Auth error:', error)
@@ -233,8 +234,8 @@ export default function DashboardPage() {
                 <div key={generation.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                   <div className="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
                     {generation.image_url ? (
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img 
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img 
                         src={generation.image_url} 
                         alt="Generated logo"
                         className="w-full h-full object-contain rounded-lg"

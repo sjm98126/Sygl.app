@@ -36,7 +36,7 @@ export async function generateLogo(options: GenerationOptions): Promise<Generati
     if (options.model === 'gemini-2.5') {
       const geminiOptions: GeminiGenerationOptions = {
         prompt: options.prompt,
-        style: options.style as any,
+        style: options.style as 'minimalist' | 'modern' | 'classic' | 'bold' | 'elegant' | undefined,
         colors: options.colors,
         format: options.format,
         industry: options.industry
@@ -45,7 +45,7 @@ export async function generateLogo(options: GenerationOptions): Promise<Generati
     } else if (options.model === 'ideogram') {
       const ideogramOptions: IdeogramGenerationOptions = {
         prompt: options.prompt,
-        style: options.style as 'auto' | 'general' | 'realistic' | 'design' | 'render_3d' | 'anime',
+        style: (options.style as 'auto' | 'general' | 'realistic' | 'design' | 'render_3d' | 'anime') || 'auto',
         aspectRatio: options.aspectRatio || '1:1'
       }
       result = await generateLogoWithIdeogram(ideogramOptions)
@@ -103,4 +103,5 @@ export function getModelInfo(model: AIModel) {
   }
 }
 
-export { AIModel, CREDIT_COSTS } from '../pricing'
+export type { AIModel } from '../pricing'
+export { CREDIT_COSTS } from '../pricing'

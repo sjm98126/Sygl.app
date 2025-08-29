@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Sparkles, Mail, Lock, Eye, EyeOff, User } from 'lucide-react'
 import { SUBSCRIPTION_TIERS } from '@/lib/pricing'
 
-export default function SignUpPage() {
+function SignUpForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const selectedPlan = searchParams.get('plan') || 'basic'
@@ -265,5 +265,13 @@ export default function SignUpPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignUpForm />
+    </Suspense>
   )
 }

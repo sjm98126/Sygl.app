@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 
@@ -35,6 +36,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
+    // Type assertion for userData
+    const userInfo = userData as any
+
     // Get recent generations for activity
     const { data: recentGenerations } = await supabaseAdmin
       .from('logo_generations')
@@ -44,11 +48,11 @@ export async function GET(request: NextRequest) {
       .limit(10)
 
     return NextResponse.json({
-      creditsRemaining: userData.credits_remaining,
-      subscriptionTier: userData.subscription_tier,
-      subscription: userData.subscriptions?.[0] || null,
+      creditsRemaining: userInfo.credits_remaining,
+      subscriptionTier: userInfo.subscription_tier,
+      subscription: userInfo.subscriptions?.[0] || null,
       recentGenerations: recentGenerations || [],
-      isUnlimited: userData.credits_remaining === -1
+      isUnlimited: userInfo.credits_remaining === -1
     })
   } catch (error) {
     console.error('Credits API error:', error)
